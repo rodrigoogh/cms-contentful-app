@@ -21,7 +21,7 @@ export default async function ProductPage({
   const { isEnabled } = draftMode();
   const { product, moreProducts } = await getProductAndMoreProducts(
     params.slug,
-    isEnabled
+    !isEnabled
   );
 
   return (
@@ -30,7 +30,6 @@ export default async function ProductPage({
         <Link href="/" className="hover:underline">
           Contentful Challenge
         </Link>
-        .
       </h2>
       <article data-sb-object-id={product?.sys?.id}>
         <h1
@@ -57,3 +56,5 @@ export default async function ProductPage({
     </div>
   );
 }
+
+export const revalidate = 0;

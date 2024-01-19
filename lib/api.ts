@@ -10,6 +10,7 @@ const POST_GRAPHQL_FIELDS = `
   category
   description
   slug
+  __typename
 `;
 
 interface AllProductsResponseInterface {

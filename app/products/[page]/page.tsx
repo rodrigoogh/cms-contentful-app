@@ -2,15 +2,8 @@ import MoreProducts from "../../more-products";
 
 import { getAllProducts } from "../../../lib/api";
 import Intro from "../../intro";
-import HeroProduct, { HeroProductProps } from "../../hero-product";
 import { draftMode } from "next/headers";
 import Pagination from "@/app/pagination";
-
-interface PageInterface {
-  allProducts: HeroProductProps[];
-  currentPage: number;
-  totalPages: number;
-}
 
 export default async function Page({ params }: any) {
   const { page } = params;
@@ -25,3 +18,5 @@ export default async function Page({ params }: any) {
     </div>
   );
 }
+
+export const revalidate = false;
