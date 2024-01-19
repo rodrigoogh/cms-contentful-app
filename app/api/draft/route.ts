@@ -18,5 +18,5 @@ export async function GET(request: Request) {
   }
 
   draftMode().enable();
-  redirect(`/products/${product.slug}`);
+  redirect(`/product/${product.slug}`);
 }

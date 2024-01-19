@@ -7,15 +7,17 @@ function ProductPreview({
   image,
   description,
   category,
+  id,
 }: {
   slug: string;
   title: string;
   image: any;
   description: string;
   category: string[];
+  id: string;
 }) {
   return (
-    <div data-sb-object-id={slug}>
+    <div data-sb-object-id={id}>
       <div className="mb-8 md:mb-16">
         <CoverImage title={title} slug={slug} url={image.url} />
       </div>
@@ -66,6 +68,7 @@ export default function MoreProducts({
             category={product.category}
             description={product.description}
             slug={product.slug}
+            id={product.sys.id}
           />
         ))}
       </div>

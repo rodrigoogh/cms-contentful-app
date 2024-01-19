@@ -1,5 +1,8 @@
 import { PAGE_SIZE } from "./constants";
 const POST_GRAPHQL_FIELDS = `
+  sys {
+    id
+  }
   title
   image {
     url
@@ -28,7 +31,7 @@ async function fetchGraphQL(query: string, preview = false): Promise<any> {
         }`,
       },
       body: JSON.stringify({ query }),
-      // next: { tags: ["products"] },
+      next: { tags: ["product"] },
     }
   ).then((response) => response.json());
 }

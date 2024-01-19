@@ -24,7 +24,7 @@ export default async function ProductPage({
         </Link>
         .
       </h2>
-      <article>
+      <article data-sb-object-id={product.sys.id}>
         <h1
           className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-tight md:leading-none mb-12 text-center md:text-left"
           data-sb-field-path="title"
@@ -39,7 +39,9 @@ export default async function ProductPage({
           />
         </div>
         <div className="max-w-2xl mx-auto">
-          <div className="prose">{product.description}</div>
+          <div className="prose" data-sb-field-path="description">
+            {product.description}
+          </div>
         </div>
       </article>
       <hr className="border-accent-2 mt-28 mb-24" />
