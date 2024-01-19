@@ -20,12 +20,15 @@ export default async function ProductPage({
     <div className="container mx-auto px-5">
       <h2 className="text-2xl md:text-4xl font-bold tracking-tight md:tracking-tighter leading-tight mb-20 mt-8">
         <Link href="/" className="hover:underline">
-          Blog
+          Contentful Challenge
         </Link>
         .
       </h2>
       <article>
-        <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-tight md:leading-none mb-12 text-center md:text-left">
+        <h1
+          className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-tight md:leading-none mb-12 text-center md:text-left"
+          data-sb-field-path="title"
+        >
           {product.title}
         </h1>
         <div className="mb-8 md:mb-16 sm:mx-0">
