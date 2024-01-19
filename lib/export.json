@@ -83,7 +83,7 @@
             "id": "p5asbbjx1p90"
           }
         },
-        "id": "post",
+        "id": "product",
         "type": "ContentType",
         "createdAt": "2020-04-22T09:34:36.878Z",
         "updatedAt": "2020-04-22T12:23:57.726Z",
@@ -122,7 +122,7 @@
         }
       },
       "displayField": "title",
-      "name": "Post",
+      "name": "Product",
       "description": "",
       "fields": [
         {
@@ -361,7 +361,7 @@
         },
         "contentType": {
           "sys": {
-            "id": "post",
+            "id": "product",
             "type": "Link",
             "linkType": "ContentType"
           }

@@ -1,10 +1,10 @@
-import MoreProducts from "./more-products";
+import MoreProducts from "../../more-products";
 
-import { getAllProducts } from "../lib/api";
-import Intro from "./intro";
-import HeroProduct, { HeroProductProps } from "./hero-product";
+import { getAllProducts } from "../../../lib/api";
+import Intro from "../../intro";
+import HeroProduct, { HeroProductProps } from "../../hero-product";
 import { draftMode } from "next/headers";
-import Pagination from "./pagination";
+import Pagination from "@/app/pagination";
 
 interface PageInterface {
   allProducts: HeroProductProps[];
@@ -13,7 +13,7 @@ interface PageInterface {
 }
 
 export default async function Page({ params }: any) {
-  const { page = "1" } = params;
+  const { page } = params;
   const { isEnabled } = draftMode();
   const { allProducts, total } = await getAllProducts(isEnabled, page);
 

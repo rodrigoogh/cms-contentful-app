@@ -1,32 +1,18 @@
+import { PAGE_SIZE } from "./constants";
 const POST_GRAPHQL_FIELDS = `
-  slug
   title
-  coverImage {
+  image {
     url
   }
-  date
-  author {
-    name
-    picture {
-      url
-    }
-  }
-  excerpt
-  content {
-    json
-    links {
-      assets {
-        block {
-          sys {
-            id
-          }
-          url
-          description
-        }
-      }
-    }
-  }
+  category
+  description
+  slug
 `;
+
+interface AllProductsResponseInterface {
+  allProducts: any[];
+  total: number;
+}
 
 async function fetchGraphQL(query: string, preview = false): Promise<any> {
   return fetch(
@@ -42,56 +28,70 @@ async function fetchGraphQL(query: string, preview = false): Promise<any> {
         }`,
       },
       body: JSON.stringify({ query }),
-      next: { tags: ["posts"] },
-    },
+      // next: { tags: ["products"] },
+    }
   ).then((response) => response.json());
 }
 
-function extractPost(fetchResponse: any): any {
-  return fetchResponse?.data?.postCollection?.items?.[0];
+function extractProduct(fetchResponse: any): any {
+  return fetchResponse?.data?.productCollection?.items?.[0];
 }
 
-function extractPostEntries(fetchResponse: any): any[] {
-  return fetchResponse?.data?.postCollection?.items;
+function extractProductEntries(
+  fetchResponse: any
+): AllProductsResponseInterface {
+  const { items = [], total = 0 } = fetchResponse?.data?.productCollection;
+  return {
+    allProducts: items,
+    total,
+  };
 }
 
-export async function getPreviewPostBySlug(slug: string | null): Promise<any> {
-  const entry = await fetchGraphQL(
-    `query {
-      postCollection(where: { slug: "${slug}" }, preview: true, limit: 1) {
-        items {
-          ${POST_GRAPHQL_FIELDS}
-        }
-      }
-    }`,
-    true,
-  );
-  return extractPost(entry);
-}
-
-export async function getAllPosts(isDraftMode: boolean): Promise<any[]> {
-  const entries = await fetchGraphQL(
-    `query {
-      postCollection(where: { slug_exists: true }, order: date_DESC, preview: ${
-        isDraftMode ? "true" : "false"
-      }) {
-        items {
-          ${POST_GRAPHQL_FIELDS}
-        }
-      }
-    }`,
-    isDraftMode,
-  );
-  return extractPostEntries(entries);
-}
-
-export async function getPostAndMorePosts(
-  slug: string,
-  preview: boolean,
+export async function getPreviewProductBySlug(
+  slug: string | null
 ): Promise<any> {
   const entry = await fetchGraphQL(
     `query {
-      postCollection(where: { slug: "${slug}" }, preview: ${
+      productCollection(where: { slug: "${slug}" }, preview: true, limit: 1) {
+        items {
+          ${POST_GRAPHQL_FIELDS}
+        }
+      }
+    }`,
+    true
+  );
+  return extractProduct(entry);
+}
+
+export async function getAllProducts(
+  isDraftMode: boolean,
+  page: number
+): Promise<AllProductsResponseInterface> {
+  const multiplier = page === 1 ? 0 : page - 1;
+  const skip = multiplier > 0 ? PAGE_SIZE * multiplier : 0;
+  const entries = await fetchGraphQL(
+    `query {
+      productCollection(preview: ${
+        isDraftMode ? "true" : "false"
+      }, limit: ${PAGE_SIZE}, skip: ${skip}) {
+        items {
+          ${POST_GRAPHQL_FIELDS}
+        }
+        total
+      }
+    }`,
+    isDraftMode
+  );
+  return extractProductEntries(entries);
+}
+
+export async function getProductAndMoreProducts(
+  slug: string,
+  preview: boolean
+): Promise<any> {
+  const entry = await fetchGraphQL(
+    `query {
+      productCollection(where: { slug: "${slug}" }, preview: ${
       preview ? "true" : "false"
     }, limit: 1) {
         items {
@@ -99,22 +99,23 @@ export async function getPostAndMorePosts(
         }
       }
     }`,
-    preview,
+    preview
   );
   const entries = await fetchGraphQL(
     `query {
-      postCollection(where: { slug_not_in: "${slug}" }, order: date_DESC, preview: ${
+      productCollection(where: { slug_not_in: "${slug}" }, preview: ${
       preview ? "true" : "false"
-    }, limit: 2) {
+    }, limit: 4) {
         items {
           ${POST_GRAPHQL_FIELDS}
         }
       }
     }`,
-    preview,
+    preview
   );
+  const { allProducts: moreProducts } = extractProductEntries(entries);
   return {
-    post: extractPost(entry),
-    morePosts: extractPostEntries(entries),
+    product: extractProduct(entry),
+    moreProducts,
   };
 }
